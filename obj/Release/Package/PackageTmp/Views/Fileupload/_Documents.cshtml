@@ -1,0 +1,52 @@
+﻿@model webapp.Models.FileUploadDetails
+<html>
+<head>
+
+    <script src="~/assets/plugins/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="~/assets/plugins/datatables/dataTables.min.js"></script>
+    <link href="~/assets/plugins/datatables/dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <script src="~/assets/datatables/dataTables.fixedColumns.min.js"></script>
+    <script src="~/assets/validate/jquery.validate.min.js"></script>
+    <script src="~/assets/validate/jquery.validate.unobtrusive.js"></script>
+</head>
+<body>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-primary">
+                <button id="btnclose" type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 style="text-align:center"> Documents</h4>
+            </div>
+            <div style="max-height: 550px; overflow-y: auto; align-items: center;margin-left:20px;">
+                <div class="form-group">
+                    @if (Model.documents != null)
+                    {
+                        if (Model.documents.Rows.Count > 0)
+                        {
+                            foreach (System.Data.DataRow row in Model.documents.Rows)
+                            {
+                                @Html.Raw(@row["Fileurl"])
+                            }
+                        }
+                        else
+                        {
+                            <div>No documents uploaded!</div>
+                        }
+                    }
+                    else
+                    {
+                        <div>No documents uploaded!</div>
+                    }
+                </div>
+            </div>
+            @*<div class="form-group">
+                    <embed src="https://stackoverflow.com/questions/291813/recommended-way-to-embed-pdf-in-html" width="1000" height="800" frameborder="0" allowfullscreen="true">
+                </div>
+                <div class="form-group">
+                    <embed src="http://www.africau.edu/images/default/sample.pdf" width="1000" height="800" frameborder="0" allowfullscreen="true">
+                </div>*@
+        </div>
+    </div>
+
+</body>
+</html>

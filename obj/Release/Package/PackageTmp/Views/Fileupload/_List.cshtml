@@ -1,0 +1,127 @@
+﻿@model webapp.Models.FileUploadDetails
+@using System.Data;
+<script>
+    $(document).ready(function () {
+        var table = $("#myTable").DataTable({
+            dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            
+            "buttons": [
+                {
+                    extend: 'copy', className: 'btn-sm', exportOptions: {
+                        columns: [0, 1, 2,3,4,5]
+                    }
+                },
+                {
+                    extend: 'csv', title: 'ExampleFile', className: 'btn-sm', exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+                {
+                    extend: 'excel', title: 'ExampleFile', className: 'btn-sm',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+                {
+                    extend: 'pdf', title: 'ExampleFile', className: 'btn-sm', exportOptions: {
+                        //columns: ':visible'
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+                {
+                    extend: 'print', className: 'btn-sm', exportOptions: {
+                        //columns: ':visible'
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                }
+            ],
+            "columnDefs": [
+                
+                //{
+                //    "targets": [0],
+                //    "visible": false,
+                //    "searchable": false
+                //}
+            ]
+        });
+
+        $("th:first-child,th:nth-child(2),th:nth-child(3),th:nth-child(4)")
+      /*  td: first - child, td: nth - child(2), td: nth - child(3),*/
+            .css({
+                /* required to allow resizer embedding */
+                position: "relative"
+            })
+            /* check .resizer CSS */
+            .prepend("<div class='resizer'></div>")
+            .resizable({
+                resizeHeight: false,
+                // we use the column as handle and filter
+                // by the contained .resizer element
+                handleSelector: "",
+                onDragStart: function (e, $el, opt) {
+                    // only drag resizer
+                    if (!$(e.target).hasClass("resizer"))
+                        return false;
+                    return true;
+                }
+            });
+    });
+</script>
+<div class="row">
+    
+    <div class="col-sm-12" >@*<h2 style="align-items:center">Order List</h2>*@
+        <div class="table-responsive">
+            <table id="myTable"  style="font-size:12px;" class="table table-bordered table-striped table-hover table-responsive"  >
+                <thead>
+                    <tr>
+                        @{
+                            for (int i = 0; i < Model.MappedList.Columns.Count; i++)
+                            {
+                                <th style="background-color:lightgrey;">
+                                    @Html.DisplayFor(item => Model.MappedList.Columns[i].ColumnName)
+                                </th>
+                            }
+                        }
+                        <th style="background-color:lightgrey;">
+                            Documents
+                        </th>
+                        <th style="background-color:lightgrey;">
+                            Delete
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow row in Model.MappedList.Rows)
+                    {
+                    <tr>
+                        @foreach (System.Data.DataColumn col in Model.MappedList.Columns)
+                        {
+                            @*if (col.ColumnName == "Fileurl")
+            {
+                <td>
+                    <div class="viewdoc"><i class="fa fa-eye"></i></div>
+                </td>
+            }
+            else
+            {*@
+                            <td>
+                                @row[col.ColumnName]
+                            </td>
+                            @*}*@
+
+
+                        }
+                        <td>
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#documents" data-placement="left"  title="View"  onclick="viewdocuments(@row[Model.MappedList.Columns["ID"]])" ><i class="fa fa-eye" aria-hidden="true"></i></button>
+                            </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="right" title="Delete "  onclick="deletedocuments(@row[Model.MappedList.Columns["ID"]])" ><i class="fas fa-circle" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

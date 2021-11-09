@@ -1,0 +1,141 @@
+﻿@model webapp.Models.Summary
+@using System.Data;
+<script>
+    $(document).ready(function () {
+        $("#OrdID").select2();
+        var table = $("#myTable").DataTable({
+            dom: "<'row'<'col-sm-4'l><'col-sm-4 text-center'B><'col-sm-4'f>>tp",
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            
+            "buttons": [
+                {
+                    extend: 'copy', className: 'btn-sm', exportOptions: {
+                        columns: [0, 1, 2,3,4,5,6,7]
+                    }
+                },
+                {
+                    extend: 'csv', title: 'ExampleFile', className: 'btn-sm', exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    }
+                },
+                {
+                    extend: 'excel', title: 'ExampleFile', className: 'btn-sm',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    }
+                },
+                {
+                    extend: 'pdf', title: 'ExampleFile', className: 'btn-sm', exportOptions: {
+                        //columns: ':visible'
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    }
+                },
+                {
+                    extend: 'print', className: 'btn-sm', exportOptions: {
+                        //columns: ':visible'
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    }
+                }
+            ],
+            "columnDefs": [
+                
+                //{
+                //    "targets": [0],
+                //    "visible": false,
+                //    "searchable": false
+                //}
+            ]
+        });
+
+        $("th:first-child,th:nth-child(2),th:nth-child(3),th:nth-child(4)")
+      /*  td: first - child, td: nth - child(2), td: nth - child(3),*/
+            .css({
+                /* required to allow resizer embedding */
+                position: "relative"
+            })
+            /* check .resizer CSS */
+            .prepend("<div class='resizer'></div>")
+            .resizable({
+                resizeHeight: false,
+                // we use the column as handle and filter
+                // by the contained .resizer element
+                handleSelector: "",
+                onDragStart: function (e, $el, opt) {
+                    // only drag resizer
+                    if (!$(e.target).hasClass("resizer"))
+                        return false;
+                    return true;
+                }
+            });
+    });
+</script>
+<div class="row">
+    @using (Html.BeginForm("refresh", "Summary", FormMethod.Post))
+    {
+        <div class="col-sm-12">
+            <div class="col-sm-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StartDate)
+                    @Html.TextBoxFor(model => model.StartDate, null, new { @id = "StartDate", @class = "form-control", @type = "date"  })
+                    @*@Html.ValidationMessageFor(model => model.StartDate, null, new { @style = "color:red" })*@
+                </div>
+            </div>
+            <div class="col-sm-3">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EndDate)  @Html.TextBoxFor(model => model.EndDate, null, new { @id = "EndDate", @class = "form-control", @type = "date"  })
+                    @*@Html.ValidationMessageFor(model => model.EndDate, null, new { @style = "color:red" })*@
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OrderNo)
+                    @Html.DropDownListFor(model => model.OrdID, new SelectList(Model.OrderList, "OrdID", "OrderNo"), 
+new
+{
+    @id = "OrdID",
+    @class = "dropdown form-control"
+})
+                </div>
+            </div>
+            <div class="col-sm-3" style="vertical-align:bottom">
+                <br />
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            @*<h2 style="align-items:center">Order List</h2>*@
+        <div class="table-responsive">
+            <table id="myTable" style="font-size:12px;" class="table table-bordered table-striped table-hover table-responsive">
+                <thead>
+                    <tr>
+                        @{
+                            for (int i = 0; i < Model.MappedList.Columns.Count; i++)
+                            {
+                                <th style="background-color:lightgrey;">
+                                    @Html.DisplayFor(item => Model.MappedList.Columns[i].ColumnName)
+                                </th>
+                            }
+                        }
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow row in Model.MappedList.Rows)
+                    {
+                        <tr>
+                            @foreach (System.Data.DataColumn col in Model.MappedList.Columns)
+                            {
+                                <td>
+                                    @row[col.ColumnName]
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+                            }
+</div>

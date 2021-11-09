@@ -1,0 +1,76 @@
+﻿@model webapp.Models.FileUploadDetails
+<html>
+<head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/assets/plugins/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="~/assets/plugins/datatables/dataTables.min.js"></script>
+    <link href="~/assets/plugins/datatables/dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <script src="~/assets/datatables/dataTables.fixedColumns.min.js"></script>
+    <script src="~/assets/validate/jquery.validate.min.js"></script>
+    <script src="~/assets/validate/jquery.validate.unobtrusive.js"></script>
+    <title> Documents upload</title>
+    <script>
+        function btncreate() {
+            alert('create');
+        }
+        function viewdocuments(ID) {
+            if (ID != "" && ID !=null) {
+                var Url = "@Url.Content("~/Fileupload/Viewpdf")";
+                $.ajax({
+                    url: Url,
+                    type: 'GET',
+                    data: { ID: +ID},
+                    success: function (result) {
+                        $('#documents').html(result);
+                    },
+                    error: function () {
+                        $('#documents').html("");
+                    }
+                });
+             }
+        }
+        function deletedocuments(ID) {
+            var r = confirm("Do you want to delete this documents!");
+            if (r == true) {
+                $.ajax({
+                    url: "@Url.Content("~/Fileupload/Delete")",
+                    type: 'GET',
+                    cache: true,
+                    data: { ID: +ID},
+                    success: function (result) {
+                        $('#list').html(result);
+                    },
+                    error: function () {
+                    }
+                })
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-12">
+            @*<div id="msg">
+                @{ Html.RenderPartial("_Employeealert", Model); }
+            </div>*@
+            <div class="row">
+                <button data-toggle="modal" data-target="#Fileupload" data-placement="left" title="New" class="btn btn-primary">Add New</button>
+            </div>
+            <br />
+            <div class="row" id="list">
+                @Html.Partial("_List", Model)
+            </div>
+            <div class="modal fade" id="Fileupload" tabindex="-1" role="dialog" aria-hidden="true">
+                @Html.Partial("_Create", Model)
+            </div>
+            <div class="modal fade" id="documents" tabindex="-1" role="dialog" aria-hidden="true">
+                @Html.Partial("_Documents", Model)
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿@model webapp.Models.Dateproduction
+@using System.Web.Optimization
+<html>
+<head>
+    <title>Production</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
+
+    <script src="~/assets/plugins/jQuery/jquery-1.12.4.min.js"></script>
+    <script src="~/assets/plugins/datatables/dataTables.min.js"></script>
+    <link href="~/assets/plugins/datatables/dataTables.min.css" rel="stylesheet" />
+    <script src="~/assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    <script src="~/assets/datatables/dataTables.fixedColumns.min.js"></script>
+
+</head>
+<body>
+    <div class="row">
+        @Html.Partial("_List", Model)
+    </div>
+</body>
+</html>
